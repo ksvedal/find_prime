@@ -9,7 +9,7 @@ fn main() {
     println!("End number");
     io::stdin().read_line(&mut input).unwrap();
     let end: i64 = input.trim().parse().unwrap();
-        
+    
     let mut found: i64 = 0;
 
     for count in start..end {
