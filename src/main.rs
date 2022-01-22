@@ -22,6 +22,7 @@ fn main() {
         }
     }
 
+    
     println!("{}: {}","Prime numbers found",&found);
 
     fn check_prime(count: &i64) -> bool { 
