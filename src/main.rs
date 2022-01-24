@@ -1,9 +1,9 @@
 use std::thread;
 
 fn main() {
-    // let start: f64 = 0;
-    let end: i64 = 1000;
-    let nthreads: i64 = 20;
+    let start: i64 = 20;
+    let end: i64 = 900;
+    let nthreads: i64 = 5;
     let range: i64 = end / nthreads;
 
     let mut all_primes : Vec<i64> = Vec::new();
@@ -11,20 +11,19 @@ fn main() {
     let mut threads = Vec::new();
 
     for i in 0..nthreads {
+        // First thread:
         if i == 0 {
             threads.push(thread::spawn(move || {
-                return prime_check(1 + (i*range), (i + 1)*range)
+                return prime_check(start, start+range);
+            }));
+        } else if i == nthreads -1 {
+            threads.push(thread::spawn(move || {
+                return prime_check(end-range, end);
             }));
         } else {
-            if i == nthreads -1 {
-                threads.push(thread::spawn(move || {
-                    return prime_check(i*range, end)
-                }));
-            } else {
-                threads.push(thread::spawn(move || {
-                    return prime_check(i*range, (i+1)*range)
-                }));
-            }
+            threads.push(thread::spawn(move || {
+                return prime_check(i*range, (i+1)*range);
+            }));
         }
     }
 
