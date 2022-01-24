@@ -1,10 +1,24 @@
 use std::thread;
+use std::io;
+use std::io::{Write, BufWriter};
 
 fn main() {
-    let start: i64 = 20;
-    let end: i64 = 900;
-    let nthreads: i64 = 5;
-    let range: i64 = end / nthreads;
+    let mut input = String::new();
+    println!("Start number: ");
+    io::stdin().read_line(&mut input).unwrap();
+    let start: i64 = input.trim().parse().unwrap();
+
+    let mut input = String::new();
+    println!("End number number: ");
+    io::stdin().read_line(&mut input).unwrap();
+    let end: i64 = input.trim().parse().unwrap();
+
+    let mut input = String::new();
+    println!("n of threads to use: ");
+    io::stdin().read_line(&mut input).unwrap();
+    let nthreads: i64 = input.trim().parse().unwrap();
+
+    let range: i64 = (end-start) / nthreads;
 
     let mut all_primes : Vec<i64> = Vec::new();
     
@@ -22,7 +36,7 @@ fn main() {
             }));
         } else {
             threads.push(thread::spawn(move || {
-                return prime_check(i*range, (i+1)*range);
+                return prime_check(start+(i*range), start+((i+1)*range)+1);
             }));
         }
     }
@@ -32,6 +46,7 @@ fn main() {
         all_primes.extend(result);
     }
 
+    println!("{}", "All primes: ");
     println!("{:?}", all_primes);
 
     fn prime_check(from: i64, to: i64) -> Vec<i64>{
