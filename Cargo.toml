@@ -1,5 +1,5 @@
 [package]
-name = "findPrime"
+name = "find_prime"
 version = "0.1.0"
 edition = "2021"
 
