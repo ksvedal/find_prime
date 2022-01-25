@@ -1,6 +1,5 @@
 use std::thread;
 use std::io;
-use std::io::{Write, BufWriter};
 
 fn main() {
     let mut input = String::new();
@@ -28,28 +27,28 @@ fn main() {
         // First thread:
         if i == 0 {
             threads.push(thread::spawn(move || {
-                return prime_check(start, start+range);
+                return prime_check(start, start+range, i);
             }));
         } else if i == nthreads -1 {
             threads.push(thread::spawn(move || {
-                return prime_check(end-range, end);
+                return prime_check(end-range, end, i);
             }));
         } else {
             threads.push(thread::spawn(move || {
-                return prime_check(start+(i*range), start+((i+1)*range)+1);
+                return prime_check(start+(i*range), start+((i+1)*range)+1, i);
             }));
         }
     }
 
     for thread in threads {
-        let result = thread.join().unwrap();
-        all_primes.extend(result);
+        let mut result = thread.join().unwrap();
+        all_primes.append(&mut result);
     }
 
     println!("{}", "All primes: ");
     println!("{:?}", all_primes);
 
-    fn prime_check(from: i64, to: i64) -> Vec<i64>{
+    fn prime_check(from: i64, to: i64, thr: i64) -> Vec<i64>{
         let mut primes : Vec<i64> = Vec::new();
 
         for count in from..to {
@@ -61,6 +60,7 @@ fn main() {
                 // If prime check passes, increment found and print count.
                 if check_prime(&count) { 
                     primes.push(count);
+                    println!("{:} {:} {:}", count, "By thread: ", thr+1);
                 }
             }  
         }
